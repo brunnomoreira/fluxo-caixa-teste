@@ -22,7 +22,8 @@
         {
             Id = Guid.NewGuid();
             Year = year;
-            _entries = new EntryCollection();            
+            _entries = new EntryCollection();
+            _report = new ReportCollection();
         }
         public void Credit(Amount amount)
         {

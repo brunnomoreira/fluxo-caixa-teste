@@ -108,6 +108,11 @@ namespace FluxoCaixa.WebApi
                {
                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Fluxo de Caixa API V1");
                });
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }

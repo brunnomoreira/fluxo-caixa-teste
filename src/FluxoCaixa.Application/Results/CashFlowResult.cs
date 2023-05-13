@@ -23,7 +23,7 @@
             CashFlowId = cashFlowId;
             Year = year;
             CurrentBalance = currentBalance;
-            Entries = Entries;
+            Entries = entries;
             Report = report;
         }
 
