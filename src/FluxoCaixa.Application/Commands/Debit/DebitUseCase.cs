@@ -4,17 +4,22 @@
     using System.Threading.Tasks;
     using FluxoCaixa.Application.Repositories;
     using FluxoCaixa.Domain.CashFlows;
+    using FluxoCaixa.Domain.Observer.Events;
+    using FluxoCaixa.Domain.Observer.Manager;
     using FluxoCaixa.Domain.ValueObjects;
 
     public sealed class DebitUseCase : IDebitUseCase
     {
+        private readonly IEventManager eventManager;
         private readonly ICashFlowReadOnlyRepository cashFlowtReadOnlyRepository;
         private readonly ICashFlowWriteOnlyRepository cashFlowWriteOnlyRepository;
 
         public DebitUseCase(
+            IEventManager eventManager,
             ICashFlowReadOnlyRepository cashFlowtReadOnlyRepository,
             ICashFlowWriteOnlyRepository cashFlowWriteOnlyRepository)
         {
+            this.eventManager = eventManager;
             this.cashFlowtReadOnlyRepository = cashFlowtReadOnlyRepository;
             this.cashFlowWriteOnlyRepository = cashFlowWriteOnlyRepository;
         }
@@ -34,6 +39,8 @@
                 debit,
                 cashFlow.GetCurrentBalance()
             );
+
+            eventManager.Publish(new CashFlowDebit(debit));
 
             return result;
         }

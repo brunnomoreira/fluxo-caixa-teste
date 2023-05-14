@@ -12,6 +12,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Http;
 using System.Net.Mime;
 using System;
+using FluxoCaixa.Domain.Observer.Manager;
+using FluxoCaixa.Domain.Observer.Events;
+using FluxoCaixa.Domain.Observer.Handlers;
 
 namespace FluxoCaixa.WebApi
 {
@@ -61,6 +64,12 @@ namespace FluxoCaixa.WebApi
 
                 options.CustomSchemaIds(x => x.FullName);
             });
+
+            services.AddSingleton(typeof(IEventManager), new RabbitMQEventManager());
+
+            var eventManager = services.BuildServiceProvider().GetService<IEventManager>();
+            eventManager.Subscribe(typeof(CashFlowCredit), new CashFlowCreditHandler());
+            eventManager.Subscribe(typeof(CashFlowDebit), new CashFlowDebitHandler());
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
